@@ -19,7 +19,7 @@ app.use(express.json());
 app.use("/images", express.static("images"));
 app.use("/tweetImages", express.static("tweetImages"));
 
-mongoose.connect("mongodb://127.0.0.1/Omnishare", (err) => {
+mongoose.connect(process.env.MONGO_URL, (err) => {
   if (err) console.log(err);
   else console.log("mongdb is connected");
 });

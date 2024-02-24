@@ -1,12 +1,22 @@
-import './App.css'
+import "./App.css";
+import Header from "./components/Header";
+import Feed from "./components/Feed";
+import Sidebar from "./components/Sidebar";
+import "./index.css";
 
 function App() {
-
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-  )
+    <>
+      <div className="App">
+        <Sidebar />
+        <div className="HeaderAndFeed">
+          <Header />
+          <Feed />
+        </div>
+      </div>
+    </>
+  );
 }
 
-export default App
+export default App;
+
