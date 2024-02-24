@@ -5,13 +5,19 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 const cors = require("cors");
-const { User } = require("./models/user_Model");
-const { Tweet } = require("./models/tweet_Model");
-const { Comment } = require("./models/comment_Model");
+const { User} = require("./models/user_Model");
+const { Comment} = require("./models/comment_Model");
+const { Tweet} = require("./models/tweet_Model")
 const app = express();
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 let path = require("path");
+
+
+require('dotenv').config();
+
+
+
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,10 +25,12 @@ app.use(express.json());
 app.use("/images", express.static("images"));
 app.use("/tweetImages", express.static("tweetImages"));
 
-mongoose.connect("mongodb://127.0.0.1/Omnishare", (err) => {
+
+mongoose.connect(process.env.MONGO_URL, (err) => {
   if (err) console.log(err);
   else console.log("mongdb is connected");
 });
+
 
 //sign in
 app.post("/", (req, res) => {
@@ -34,7 +42,6 @@ app.post("/", (req, res) => {
         error: "Invalid login",
       });
     }
-
     bcrypt.compare(userLogin.password, dbUser.password).then((isCorrect) => {
       if (isCorrect) {
         const payload = {
@@ -46,20 +53,22 @@ app.post("/", (req, res) => {
       } else {
         return res.json({ status: "error", user: false });
       }
-
     });
   });
 });
+
 
 //sign up
 app.post("/signup", async (req, res) => {
   const user = req.body;
   const takenUsername = await User.findOne({ username: user.username });
 
+
   if (takenUsername) {
     return res.json({ status: "error", error: "username already taken" });
   } else {
     user.password = await bcrypt.hash(req.body.password, 10);
+
 
     const dbUser = new User({
       username: user.username.toLowerCase(),
@@ -67,16 +76,20 @@ app.post("/signup", async (req, res) => {
       avatar: "initial-avatar.png",
     });
 
+
     dbUser.save();
     return res.json({ status: "ok" });
   }
 });
 
+
 //feed
 app.get("/feed", async (req, res) => {
   const token = req.headers["x-access-token"];
 
+
   const tweetsToSkip = req.query.t || 0;
+
 
   try {
     const decoded = jwt.verify(token, "newSecretKey");
@@ -101,6 +114,7 @@ app.get("/feed", async (req, res) => {
             }
           });
 
+
           //to know if a person has liked comment
           docs.forEach((doc) => {
             doc.comments.forEach((docComment) => {
@@ -114,6 +128,7 @@ app.get("/feed", async (req, res) => {
             });
           });
 
+
           //to know if a person has retweeted the tweet
           docs.forEach((doc) => {
             if (!doc.retweets.includes(username)) {
@@ -122,6 +137,7 @@ app.get("/feed", async (req, res) => {
               doc.retweetBtn = "green";
             }
           });
+
 
           return res.json({
             status: "ok",
@@ -135,10 +151,12 @@ app.get("/feed", async (req, res) => {
   }
 });
 
+
 //populate comments of a particular tweet
 app.get("/feed/comments/:tweetId", (req, res) => {
   Tweet.find({ postedTweetTime: req.params.tweetId })
     .populate("postedBy")
+
 
     .populate({
       path: "comments",
@@ -154,7 +172,9 @@ app.get("/feed/comments/:tweetId", (req, res) => {
     });
 });
 
+
 //compose tweet
+
 
 const storageEngine1 = multer.diskStorage({
   destination: "tweetImages",
@@ -166,8 +186,10 @@ const storageEngine1 = multer.diskStorage({
   },
 });
 
+
 const fileFilter = (req, file, callback) => {
   let pattern = /jpg|png|jpeg/; // reqex
+
 
   if (pattern.test(path.extname(file.originalname))) {
     callback(null, true);
@@ -176,14 +198,17 @@ const fileFilter = (req, file, callback) => {
   }
 };
 
+
 const upload = multer({
   storage: storageEngine1,
   fileFilter,
 });
 
+
 app.post("/feed", (req, res) => {
   const info = req.body;
   const tweetInfo = JSON.parse(req.body.tweet);
+
 
   newTweet = Tweet.create(
     {
@@ -214,6 +239,7 @@ app.post("/feed", (req, res) => {
   );
 });
 
+
 //compose comment
 app.post("/feed/comment/:tweetId", (req, res) => {
   Comment.create(
@@ -243,6 +269,7 @@ app.post("/feed/comment/:tweetId", (req, res) => {
               }
             );
 
+
             return res.json({
               comments: doc.comments.length,
               docs: doc.comments,
@@ -254,6 +281,7 @@ app.post("/feed/comment/:tweetId", (req, res) => {
     }
   );
 });
+
 
 //retweet
 app.route("/post/:userName/retweet/:tweetId").post((req, res) => {
@@ -286,8 +314,10 @@ app.route("/post/:userName/retweet/:tweetId").post((req, res) => {
           }
         );
 
+
         //update the number of retweets
         doc.retweets.push(req.params.userName);
+
 
         doc.retweetBtn = "green";
         doc.save();
@@ -306,15 +336,18 @@ app.route("/post/:userName/retweet/:tweetId").post((req, res) => {
             }
           );
 
+
         let indexForRetweets = doc.retweets.indexOf(req.params.userName);
         doc.retweets.splice(indexForRetweets, 1);
         doc.retweetBtn = "black";
+
 
         doc.save();
       }
     } else console.log(err);
   });
 });
+
 
 //like tweet
 app.route("/post/:userName/like/:tweetId").post((req, res) => {
@@ -336,6 +369,7 @@ app.route("/post/:userName/like/:tweetId").post((req, res) => {
   });
 });
 
+
 //like comment
 app.route("/comment/:userName/like/:commentId").post((req, res) => {
   Comment.findOne({ postedCommentTime: req.params.commentId }, (err, doc) => {
@@ -356,6 +390,7 @@ app.route("/comment/:userName/like/:commentId").post((req, res) => {
   });
 });
 
+
 //delete tweet
 app.route("/deleteTweet/:tweetId").post((req, res) => {
   Tweet.findOneAndDelete({ postedTweetTime: req.params.tweetId }, (err) => {
@@ -366,6 +401,7 @@ app.route("/deleteTweet/:tweetId").post((req, res) => {
     } else console.log(err);
   });
 });
+
 
 //delete comment
 app.route("/deleteComment/:commentId").post((req, res) => {
@@ -381,6 +417,7 @@ app.route("/deleteComment/:commentId").post((req, res) => {
   );
 });
 
+
 //edit tweet
 app.route("/editTweet/:tweetId").post((req, res) => {
   Tweet.findOne({ postedTweetTime: req.params.tweetId }, (err, doc) => {
@@ -392,6 +429,7 @@ app.route("/editTweet/:tweetId").post((req, res) => {
     });
   });
 });
+
 
 //edit comment
 app.route("/editComment/:commentId").post((req, res) => {
@@ -405,6 +443,7 @@ app.route("/editComment/:commentId").post((req, res) => {
   });
 });
 
+
 //upload image
 const storageEngine = multer.diskStorage({
   destination: "images",
@@ -416,10 +455,12 @@ const storageEngine = multer.diskStorage({
   },
 });
 
+
 const upload1 = multer({
   storage: storageEngine,
   fileFilter,
 });
+
 
 app.post("/avatar/:userName", (req, res) => {
   User.findOne({ username: req.params.userName }, (err, user) => {
@@ -433,9 +474,11 @@ app.post("/avatar/:userName", (req, res) => {
   });
 });
 
+
 //user profile
 app.get("/profile/:userName", async (req, res) => {
   const token = req.headers["x-access-token"];
+
 
   try {
     const decoded = jwt.verify(token, "newSecretKey");
@@ -449,11 +492,13 @@ app.get("/profile/:userName", async (req, res) => {
         ],
       })
 
+
       .exec((err, doc) => {
         if (!err) {
           if (!doc.followers.includes(username)) {
             doc.followBtn = "Follow";
           } else doc.followBtn = "Following";
+
 
           doc.tweets.forEach((tweet) => {
             if (!tweet.likes.includes(username)) {
@@ -461,11 +506,13 @@ app.get("/profile/:userName", async (req, res) => {
             } else tweet.likeTweetBtn = "deeppink";
           });
 
+
           doc.tweets.forEach((tweet) => {
             if (!tweet.retweets.includes(username)) {
               tweet.retweetBtn = "black";
             } else tweet.retweetBtn = "green";
           });
+
 
           return res.json({
             status: "ok",
@@ -481,6 +528,7 @@ app.get("/profile/:userName", async (req, res) => {
     return res.json({ status: "error", error: "invalid token" });
   }
 });
+
 
 //follow
 //userName= active user
@@ -508,7 +556,9 @@ app.route("/user/:user/follow/:userName").post((req, res) => {
   });
 });
 
+
 // search page
+
 
 app.get("/search/:user", (req, res) => {
   // console.log(req.params.user);
@@ -522,6 +572,13 @@ app.get("/search/:user", (req, res) => {
   );
 });
 
+
 app.listen("5000", () => {
   console.log("server running on port 5000");
 });
+
+
+
+
+
+
