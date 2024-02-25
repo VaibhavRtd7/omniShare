@@ -92,13 +92,16 @@ function Sidebar() {
   };
 
   return (
+    <>
+    {/* <p className="mt-5 h-[20px] bg-slate-500 mb-4"> Hello User</p> */}
     <div className="sidebar">
       <ul className="sidebar-menu">
-        <li className="sidebar-menu-items">
+        <li className="m-2 text-lg font-bold text-zinc-800"> Hello,  {activeUser}</li>
+        <li className="sidebar-menu-items justify-end">
           <div className="title">
             <Link to="/feed">
-            <div className="homeContainer-logo ">
-              <img src={'/omnilogo.jpg'}/>
+            <div className="homeContainer-logo">
+              <img src={'/omnilogo.jpg'} alt='logoImage' className="rounded-full h-16 "/>
             </div>
             </Link>
           </div>
@@ -137,23 +140,23 @@ function Sidebar() {
           >
             {(close) => (
               <form
-                onSubmit={(e) => {
-                  handleSubmit(e);
-                  close();
-                }}
-                method="post"
+              onSubmit={(e) => {
+                handleSubmit(e);
+                close();
+              }}
+              method="post"
                 encType="multipart/form-data"
                 action="http://localhost:5000/feed"
                 className="tweet-form"
                 id="form1"
-              >
+                >
                 <input
                   autoFocus
                   placeholder="What's happening?"
                   type="text"
                   value={input}
                   onChange={handleChange}
-                ></input>
+                  ></input>
                 <div className="tweet-flex">
                   <div>
                     <AiFillCamera
@@ -170,12 +173,12 @@ function Sidebar() {
                     placeholder="Enter an image url here"
                     value={img}
                     onChange={(e) => setImg(e.target.value)}
-                  ></input>
+                    ></input>
                   <button
                     className={checkInput ? "tweetBtn" : "disabled"}
                     disabled={!checkInput}
                     type="submit"
-                  >
+                    >
                     {" "}
                     Tweet
                   </button>
@@ -187,6 +190,7 @@ function Sidebar() {
         </li>
       </ul>
     </div>
+  </>
   );
 }
 

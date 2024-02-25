@@ -6,7 +6,7 @@ function Header() {
   return(
 
     <>
-      <div className="header font-mono">
+      <div className="header font-bold justify-end">
       </div>
     </>
   );
