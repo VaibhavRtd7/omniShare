@@ -5,13 +5,14 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 const cors = require("cors");
-const { User } = require("./models/user_Model");
-const { Tweet } = require("./models/tweet_Model");
-const { Comment } = require("./models/comment_Model");
+const { User } = require("./Models/user_Model");
+const { Tweet } = require("./Models/tweet_Model");
+const { Comment } = require("./Models/comment_Model");
 const app = express();
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 let path = require("path");
+require("dotenv").config();
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,10 +20,12 @@ app.use(express.json());
 app.use("/images", express.static("images"));
 app.use("/tweetImages", express.static("tweetImages"));
 
+mongoose.set("strictQuery", false);
 mongoose.connect(process.env.MONGO_URL, (err) => {
   if (err) console.log(err);
   else console.log("mongdb is connected");
 });
+
 
 //sign in
 app.post("/", (req, res) => {
