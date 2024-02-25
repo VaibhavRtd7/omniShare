@@ -96,7 +96,9 @@ function Sidebar() {
         <li className="sidebar-menu-items">
           <div className="title">
             <Link to="/feed">
-              <BsTwitter />
+            <div className="homeContainer-logo ">
+              <img src={'/omnilogo.jpg'}/>
+            </div>
             </Link>
           </div>
         </li>

@@ -39,9 +39,12 @@
 .homeContainer-logo {
     font-size: 1.5rem;
     color: var(--blue);
+    margin-bottom: 10px;
+    justify-content: center;
 }
 
-.homeContainer-logo svg {
+.homeContainer-logo img {
+    align-items: center;
     margin: auto;
 }
 
