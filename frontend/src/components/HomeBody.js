@@ -85,8 +85,11 @@ function HomeBody() {
   return (
     <div className="container">
       <div className="homeContainer">
-        <div className="homeContainer-logo">
+        {/* <div className="homeContainer-logo">
           <BsTwitter />
+        </div> */}
+       <div className="homeContainer-logo ">
+          <img src={'/omnilogo.jpg'}/>
         </div>
         <br></br>
         <div className="homeContainer-header">

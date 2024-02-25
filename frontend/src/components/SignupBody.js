@@ -58,14 +58,12 @@ function SignupBody() {
   return (
     <div className="container">
       <div className="homeContainer">
-        <div className="homeContainer-logo">
-          {/* <BsTwitter /> */}
-          <PiTwitterLogoFill />
-
+        <div className="homeContainer-logo ">
+          <img src={'/omnilogo.jpg'}/>
         </div>
         <br></br>
         <div className="homeContainer-header">
-          <h2>Join Twitter today</h2>
+          <h2>Join OmniShare today</h2>
         </div>
 
         <a className="googleSignIn" href="#">
