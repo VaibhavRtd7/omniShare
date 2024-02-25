@@ -10,6 +10,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import moment from "moment";
 import axios from "axios";
+import "../index.css"
 
 import jwtDecode from "jwt-decode";
 
@@ -96,7 +97,10 @@ function Sidebar() {
         <li className="sidebar-menu-items">
           <div className="title">
             <Link to="/feed">
-              <BsTwitter />
+              {/* <BsTwitter />  */}
+               <img src=".../assets/logo-black.png" alt="logo-img" /> 
+               
+               {/* <img src="./logo.svg" alt="logo-img"  />  */}
             </Link>
           </div>
         </li>

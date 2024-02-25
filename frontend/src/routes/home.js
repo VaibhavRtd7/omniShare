@@ -4,7 +4,7 @@ import HomeBody from "../components/HomeBody";
 
 function Home() {
   return (
-    <>
+    <>   
       <Header />
       <HomeBody />
     </>

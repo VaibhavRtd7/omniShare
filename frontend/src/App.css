@@ -38,7 +38,7 @@
 
 .homeContainer-logo {
     font-size: 1.5rem;
-    color: var(--blue);
+    color: var(--black);
 }
 
 .homeContainer-logo svg {
@@ -196,7 +196,7 @@ input:focus {
     border-radius: 30px;
     padding: 5px 20px;
     cursor: pointer;
-    background-color: var(--blue) !important;
+    background-color: black !important;
     border: 0;
     color: white !important;
     font-weight: bold;
@@ -207,7 +207,7 @@ input:focus {
     border-radius: 30px;
     padding: 5px 20px;
     cursor: pointer;
-    background-color: var(--blue) !important;
+    background-color:  black !important;
     opacity: 0.5;
     cursor: default;
     border: 0;

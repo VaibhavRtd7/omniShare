@@ -90,7 +90,7 @@ function HomeBody() {
         </div>
         <br></br>
         <div className="homeContainer-header">
-          <h2>Sign in to Twitter</h2>
+          <h2>Sign in to OmniShare</h2>
         </div>
 
         <a className="googleSignIn" href="#">

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
-import { BsTwitter } from "react-icons/bs";
+// import { BsTwitter } from "react-icons/bs";
+import { PiTwitterLogoFill } from "react-icons/pi";
 import { useToast } from "@chakra-ui/toast";
 
 function SignupBody() {
@@ -58,7 +59,9 @@ function SignupBody() {
     <div className="container">
       <div className="homeContainer">
         <div className="homeContainer-logo">
-          <BsTwitter />
+          {/* <BsTwitter /> */}
+          <PiTwitterLogoFill />
+
         </div>
         <br></br>
         <div className="homeContainer-header">
