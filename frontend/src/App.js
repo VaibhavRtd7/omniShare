@@ -1,9 +1,16 @@
-import './App.css';
+import "./App.css";
+import Header from "./components/Header";
+import Feed from "./components/Feed";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   return (
     <div className="App">
-        <p> Just Demo</p>
+      <Sidebar />
+      <div className="HeaderAndFeed">
+        <Header />
+        <Feed />
+      </div>
     </div>
   );
 }
