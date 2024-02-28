@@ -63,3 +63,7 @@ $ cd frontend
 ```
 $ npm start
 ```
+
+---------------
+- Deployment Link 🔗:- https://omnishare.vercel.app/
+- Youtube video Link 🔗:- https://www.youtube.com/watch?v=YMAopKyoRlQ&ab_channel=VaibhavRathod
